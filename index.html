@@ -3,148 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gerador Par ou Ímpar - Lorenzo Dev</title>
+    <title>Lorenzo Dev - Hub Par ou Ímpar</title>
     <style>
-        /* Estilo Dark Neon */
+        /* Estilo Geral Ultra Dark */
         body {
             background-color: #050505;
             color: #ffffff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
+            justify-content: center;
+            min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            gap: 20px;
+            padding: 20px;
         }
 
         .container {
             background: #111;
-            padding: 30px;
+            padding: 25px;
             border-radius: 20px;
-            border: 2px solid #00ff00; /* Neon Verde */
-            box-shadow: 0 0 20px #00ff00;
             text-align: center;
-            width: 320px;
+            width: 350px;
+            transition: 0.3s;
         }
+
+        /* Cores Neon */
+        .neon-verde { border: 2px solid #00ff00; box-shadow: 0 0 15px #00ff00; }
+        .neon-azul { border: 2px solid #00f7ff; box-shadow: 0 0 15px #00f7ff; }
 
         h1 {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #00ff00;
+            letter-spacing: 1px;
         }
 
-        .buttons {
+        .titulo-verde { color: #00ff00; }
+        .titulo-azul { color: #00f7ff; }
+
+        .btn-group {
             display: flex;
             gap: 10px;
             justify-content: center;
-            margin-bottom: 30px;
+            margin-bottom: 15px;
         }
 
         button {
-            padding: 12px 20px;
+            padding: 10px 15px;
             font-weight: bold;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
             text-transform: uppercase;
+            font-size: 0.8rem;
         }
 
-        .btn-par {
-            background: #0066ff;
-            color: white;
-            box-shadow: 0 0 10px #0066ff;
+        button:hover { transform: scale(1.05); }
+
+        .btn-par { background: #0066ff; color: white; }
+        .btn-impar { background: #ff0055; color: white; }
+        .btn-jogo-par { background: #00ff88; color: #000; }
+
+        input {
+            background: #222;
+            border: 1px solid #00f7ff;
+            color: #fff;
+            padding: 10px;
+            width: 70%;
+            border-radius: 5px;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 15px;
         }
 
-        .btn-par:hover {
-            background: #0052cc;
-            transform: scale(1.1);
-        }
-
-        .btn-impar {
-            background: #ff0055;
-            color: white;
-            box-shadow: 0 0 10px #ff0055;
-        }
-
-        .btn-impar:hover {
-            background: #cc0044;
-            transform: scale(1.1);
-        }
-
-        #resultado-box {
-            margin-top: 20px;
-            padding: 20px;
+        .display-box {
+            margin-top: 10px;
+            padding: 15px;
             background: #000;
             border-radius: 10px;
-            border: 1px dashed #555;
+            min-height: 50px;
         }
 
-        #resultado {
-            font-size: 3rem;
-            font-weight: bold;
-            display: block;
-            color: #fff;
-            text-shadow: 0 0 10px #fff;
-        }
+        .grande-num { font-size: 2.5rem; font-weight: bold; display: block; }
+        .status { font-size: 0.8rem; color: #888; }
+        #vencedor { margin-top: 10px; font-weight: bold; text-transform: uppercase; }
 
-        .tipo-label {
-            font-size: 0.8rem;
-            color: #888;
-            margin-top: 5px;
-        }
+        hr { border: 0; border-top: 1px solid #333; width: 100%; margin: 10px 0; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h1>Sorteador <br> Par ou Ímpar</h1>
+    <div class="container neon-verde" id="card-gerador">
+        <h1 class="titulo-verde">Sorteador Rápido</h1>
+        <p class="status">Pegue um número para usar no jogo:</p>
         
-        <p>Escolha o tipo de número:</p>
-        
-        <div class="buttons">
-            <button class="btn-par" onclick="gerar(0)">Gerar Par</button>
-            <button class="btn-impar" onclick="gerar(1)">Gerar Ímpar</button>
+        <div class="btn-group">
+            <button class="btn-par" onclick="gerarNum(0)">Gerar Par</button>
+            <button class="btn-impar" onclick="gerarNum(1)">Gerar Ímpar</button>
         </div>
 
-        <div id="resultado-box">
-            <span id="resultado">?</span>
-            <div id="label" class="tipo-label">Aguardando escolha...</div>
+        <div class="display-box">
+            <span id="res-gerador" class="grande-num">?</span>
+            <div id="label-gerador" class="status">Escolha uma opção</div>
+        </div>
+    </div>
+
+    <div class="container neon-azul" id="card-jogo">
+        <h1 class="titulo-azul">Lorenzo Bot vs Você</h1>
+        
+        <input type="number" id="meuNumero" placeholder="Digite seu número" min="0">
+        
+        <div class="btn-group">
+            <button class="btn-jogo-par" onclick="jogarContraBot(0)">Sou PAR</button>
+            <button class="btn-impar" onclick="jogarContraBot(1)">Sou ÍMPAR</button>
+        </div>
+
+        <div class="display-box">
+            <div id="info-bot" class="status">Aguardando desafio...</div>
+            <div id="soma-total" class="grande-num" style="color: #00f7ff;">?</div>
+            <div id="vencedor"></div>
         </div>
     </div>
 
     <script>
-        function gerar(escolha) {
-            // escolha 0 = Par, escolha 1 = Ímpar
-            
-            // Gera um número aleatório de 1 a 1000
-            let num = Math.floor(Math.random() * 1000) + 1;
-            let display = document.getElementById('resultado');
-            let label = document.getElementById('label');
+        // LÓGICA DO GERADOR
+        function gerarNum(tipo) {
+            let num = Math.floor(Math.random() * 100) + 1;
+            let display = document.getElementById('res-gerador');
+            let label = document.getElementById('label-gerador');
 
-            if (escolha === 0) {
-                // Se o número for ímpar (resto 1), soma 1 para virar par
-                if (num % 2 !== 0) {
-                    num += 1;
-                }
+            if (tipo === 0) {
+                if (num % 2 !== 0) num += 1;
                 display.style.color = "#0066ff";
-                display.style.textShadow = "0 0 15px #0066ff";
-                label.innerText = "Número Par Gerado!";
+                label.innerText = "Número PAR gerado!";
             } else {
-                // Se o número for par (resto 0), soma 1 para virar ímpar
-                if (num % 2 === 0) {
-                    num += 1;
-                }
+                if (num % 2 === 0) num += 1;
                 display.style.color = "#ff0055";
-                display.style.textShadow = "0 0 15px #ff0055";
-                label.innerText = "Número Ímpar Gerado!";
+                label.innerText = "Número ÍMPAR gerado!";
+            }
+            display.innerText = num;
+        }
+
+        // LÓGICA DO JOGO CONTRA BOT
+        function jogarContraBot(escolhaUsuario) {
+            let input = document.getElementById('meuNumero');
+            let numUsuario = parseInt(input.value);
+
+            if (isNaN(numUsuario)) {
+                alert("Mano, digite um número primeiro!");
+                return;
             }
 
-            // Mostra o número na tela
-            display.innerText = num;
+            let numBot = Math.floor(Math.random() * 11);
+            let soma = numUsuario + numBot;
+            let ehPar = (soma % 2 === 0);
+            let resultadoTipo = ehPar ? 0 : 1;
+
+            let infoBot = document.getElementById('info-bot');
+            let somaTexto = document.getElementById('soma-total');
+            let vencedorTexto = document.getElementById('vencedor');
+            let cardJogo = document.getElementById('card-jogo');
+
+            infoBot.innerHTML = `Você: ${numUsuario} | Bot: ${numBot}`;
+            somaTexto.innerText = soma;
+
+            if (escolhaUsuario === resultadoTipo) {
+                vencedorTexto.innerText = "🏆 VOCÊ GANHOU!";
+                vencedorTexto.style.color = "#00ff88";
+                cardJogo.style.borderColor = "#00ff88";
+                cardJogo.style.boxShadow = "0 0 20px #00ff88";
+            } else {
+                vencedorTexto.innerText = "🤖 BOT VENCEU!";
+                vencedorTexto.style.color = "#ff0055";
+                cardJogo.style.borderColor = "#ff0055";
+                cardJogo.style.boxShadow = "0 0 20px #ff0055";
+            }
         }
     </script>
 
