@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador Par ou Ímpar - Lorenzo Dev</title>
+    <style>
+        /* Estilo Dark Neon */
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #111;
+            padding: 30px;
+            border-radius: 20px;
+            border: 2px solid #00ff00; /* Neon Verde */
+            box-shadow: 0 0 20px #00ff00;
+            text-align: center;
+            width: 320px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #00ff00;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 12px 20px;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .btn-par {
+            background: #0066ff;
+            color: white;
+            box-shadow: 0 0 10px #0066ff;
+        }
+
+        .btn-par:hover {
+            background: #0052cc;
+            transform: scale(1.1);
+        }
+
+        .btn-impar {
+            background: #ff0055;
+            color: white;
+            box-shadow: 0 0 10px #ff0055;
+        }
+
+        .btn-impar:hover {
+            background: #cc0044;
+            transform: scale(1.1);
+        }
+
+        #resultado-box {
+            margin-top: 20px;
+            padding: 20px;
+            background: #000;
+            border-radius: 10px;
+            border: 1px dashed #555;
+        }
+
+        #resultado {
+            font-size: 3rem;
+            font-weight: bold;
+            display: block;
+            color: #fff;
+            text-shadow: 0 0 10px #fff;
+        }
+
+        .tipo-label {
+            font-size: 0.8rem;
+            color: #888;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Sorteador <br> Par ou Ímpar</h1>
+        
+        <p>Escolha o tipo de número:</p>
+        
+        <div class="buttons">
+            <button class="btn-par" onclick="gerar(0)">Gerar Par</button>
+            <button class="btn-impar" onclick="gerar(1)">Gerar Ímpar</button>
+        </div>
+
+        <div id="resultado-box">
+            <span id="resultado">?</span>
+            <div id="label" class="tipo-label">Aguardando escolha...</div>
+        </div>
+    </div>
+
+    <script>
+        function gerar(escolha) {
+            // escolha 0 = Par, escolha 1 = Ímpar
+            
+            // Gera um número aleatório de 1 a 1000
+            let num = Math.floor(Math.random() * 1000) + 1;
+            let display = document.getElementById('resultado');
+            let label = document.getElementById('label');
+
+            if (escolha === 0) {
+                // Se o número for ímpar (resto 1), soma 1 para virar par
+                if (num % 2 !== 0) {
+                    num += 1;
+                }
+                display.style.color = "#0066ff";
+                display.style.textShadow = "0 0 15px #0066ff";
+                label.innerText = "Número Par Gerado!";
+            } else {
+                // Se o número for par (resto 0), soma 1 para virar ímpar
+                if (num % 2 === 0) {
+                    num += 1;
+                }
+                display.style.color = "#ff0055";
+                display.style.textShadow = "0 0 15px #ff0055";
+                label.innerText = "Número Ímpar Gerado!";
+            }
+
+            // Mostra o número na tela
+            display.innerText = num;
+        }
+    </script>
+
+</body>
+</html>
